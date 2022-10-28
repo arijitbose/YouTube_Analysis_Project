@@ -1,0 +1,7 @@
+google-api-python-client
+pandas
+flask
+beautifulsoup4
+requests
+gunicorn
+IPython
