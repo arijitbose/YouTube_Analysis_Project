@@ -61,8 +61,15 @@ def get_video_details(youtube,c):
     return all_video_stats
 
 a=get_video_details(youtube,c)
-video_data=pd.DataFrame(a)
-print(video_data)
+headings=('Title','Views','Likes','Comments')
+
+f=[tuple(d.values()) for d in a]
+data=tuple(f)
+
+
+
+# video_data=pd.DataFrame(a)
+# print(video_data)
 
 
 

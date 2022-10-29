@@ -23,7 +23,8 @@ def get_keys(path):
 keys = get_keys(path)
 API_Key = keys['api_key'] 
 from youtube_scrape import *
-       
+
+headings=('Title','Views','Likes','Comments')
 
 
 
@@ -39,8 +40,8 @@ def home():
 def predict_api():
     data=request.json['data']
     print(data)
-    parameter1=str(data.get('name'))
-    channel_id = requests.get('https://www.googleapis.com/youtube/v3/search?part=id&q='+parameter1+'&type=channel&key='+API_Key).json()['items'][0]['id']['channelId']
+    parameter2=str(data.get('name'))
+    channel_id = requests.get('https://www.googleapis.com/youtube/v3/search?part=id&q='+parameter2+'&type=channel&key='+'AIzaSyAufB1AlZgwCpxh8H5VwBjtwbE-1_X6tT4').json()['items']['id']['channelId']
     print(channel_id)
     youtube = googleapiclient.discovery.build('youtube', 'v3', developerKey = API_Key)
     a=  get_channel_stats(youtube,channel_id) 
@@ -48,7 +49,7 @@ def predict_api():
     c=','.join(b)
     d=get_video_details(youtube,c)
     video_data=pd.DataFrame(d)
-    print(video_data)
+    # print(video_data)
     return str(video_data)
 @app.route('/predict',methods=['POST'])
 def predict():
@@ -62,22 +63,27 @@ def predict():
     b1= get_video_id(youtube,a1)
     c1=','.join(b1)
     d1=get_video_details(youtube,c1)
-    video_data=pd.DataFrame(d1)
-    # print(video_data)
+    print(d1)
     
-    html_final = video_data.to_html()
+
+    f=[tuple(d.values()) for d in d1]
+    data=tuple(f)
+    # video_data=pd.DataFrame(d1)
+    # # print(video_data)
     
-    text_file = open("templates/result.html", "w")
-    text_file.write(html_final)
+    # html_final = video_data.to_html()
+    
+    # text_file = open("templates/result.html", "w")
+    # text_file.write(html_final)
      
-    text_file.close()
+    # text_file.close()
    
    
     
     
 
 
-    return render_template("result.html",name=predict) 
+    return render_template("table.html",name=predict,headings=headings,data=data) 
     # return str(video_data)    
     
    
